@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SystemOcen.ViewModel"
+             x:Class="SystemOcen.View.MainPage">
+    <ContentPage.BindingContext>
+        <vm:MainPageViewModel/>
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="60, 0">
+            <Label Text="Aplikacja uczniowie" FontSize="Large" />
+
+            <CollectionView ItemsSource="{Binding Uczniowie}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout Padding="0, 20">
+                            <Label Text="{Binding Name, StringFormat='Imie: {0}'}" FontSize="Medium" />
+                            <Label Text="{Binding Surname, StringFormat='Nazwisko: {0}'}" FontSize="Medium" />
+                            <HorizontalStackLayout>
+                                <Label Text="Oceny ucznia: " FontSize="Medium" />
+                            <CollectionView ItemsSource="{Binding Oceny}">
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Horizontal"/>
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <HorizontalStackLayout>
+                                                <Label Text="{Binding Value, StringFormat=' {0}, '}" FontSize="Medium"/>
+                                            </HorizontalStackLayout>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </HorizontalStackLayout>
+                            <Button Text="Wyświetl szczegóły" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=selectUczenCmd}" CommandParameter="{Binding}"/>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Border Stroke="Black" StrokeThickness="1" Margin="0,20,0,20"/>
+            <Label Text="{Binding SelectedUczen.Name, StringFormat='Imie: {0}'}"  FontSize="Title" />
+            <Label Text="{Binding SelectedUczen.Surname, StringFormat='Nazwisko: {0}'}"  FontSize="Title" />
+            <HorizontalStackLayout>
+                <Label Text="Oceny:"/>
+                <CollectionView ItemsSource="{Binding SelectedUczen.Oceny}">
+                <CollectionView.ItemTemplate>
+                    
+                    <DataTemplate>
+                        <HorizontalStackLayout>
+                                <Label Text="{Binding Value, StringFormat=' {0}'}"/>
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            </HorizontalStackLayout>
+            <Label Text="{Binding SelectedUczen.Srednia, StringFormat='Średnia: {0:F2}'}"/>
+            <Label Text="Dodaj ocenę"/>
+            <Entry Text="{Binding newOcena.Value, Mode=TwoWay}" Keyboard="Numeric"/>
+            <HorizontalStackLayout>
+                <Button Text="Dodaj ocenę" Command="{Binding AddUczenCmd}"/>
+                <Button Text="Oblicz średnią" Command="{Binding ObliczSredniaCmd}"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
